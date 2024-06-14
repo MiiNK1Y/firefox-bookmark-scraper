@@ -17,10 +17,10 @@ class Firefox():
         return cleaned_url_line
 
     def make_url_from_string(self, site: str) -> str:
-        possible_url_combos = []
+        created_urls = []
         for url in self.url_schemes:
-            possible_url_combos.append(url + site)
-        return possible_url_combos
+            created_urls.append(url + site)
+        return created_urls
 
     def make_url_combos(self) -> list:
         possible_url_combos = []
