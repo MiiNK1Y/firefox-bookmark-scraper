@@ -1,6 +1,6 @@
-#!.env/bin/python3
+#/bin/python3
 
-import os, time
+import os
 from sys import argv
 
 target_file = argv[1]
@@ -11,12 +11,6 @@ if os.name == 'nt':
     os.system('cls')
 else:
     os.system('clear')
-
-def c_green(string: str) -> str:
-    GREEN = '\033[92m'
-    ENDC = '\033[0m' 
-    colored_string = GREEN + string + ENDC
-    return colored_string
 
 class Firefox():
     def __init__(self, target_file: str, target_sites: list) -> None:
@@ -62,6 +56,12 @@ class Firefox():
         urls = sorted(list(urls))
         return urls
 
+def c_green(string: str) -> str:
+    GREEN = '\033[92m'
+    ENDC = '\033[0m' 
+    colored_string = GREEN + string + ENDC
+    return colored_string
+
 def main() -> None:
     bookmark = Firefox(target_file, target_sites)
     fetched_sites = bookmark.seek_sites()
@@ -71,7 +71,6 @@ def main() -> None:
         short_string = url[0:40] + "....."
         print(f"Adding ({num}): {c_green(short_string)}{' ' * 30}", end='\r')
         scraped.writelines(url + "\n")
-        time.sleep(0.05)
     scraped.close()
     print(f"\nURLs found: {len(fetched_sites)}\n'scraped.txt' was created.\n")
 
