@@ -58,7 +58,7 @@ class Firefox():
 
 def c_green(string: str) -> str:
     GREEN = '\033[92m'
-    ENDC = '\033[0m' 
+    ENDC = '\033[0m'
     colored_string = GREEN + string + ENDC
     return colored_string
 
