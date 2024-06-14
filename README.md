@@ -30,6 +30,8 @@ Example
 
 The script then generates a '<strong>scraped.txt</strong>' with the links found in the bookmarks file.
 
+---
+
 <div align='center'>
     <h3>DISCLAIMER</h3>
     <em>The script only works on URLs (in the bookmarsk file) that have the following schemes/prefixes:<br>
