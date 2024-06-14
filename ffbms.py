@@ -3,8 +3,12 @@
 import os
 from sys import argv
 
-target_file = argv[1]
-target_sites = argv[2:]
+if len(argv) > 1:
+    target_file = argv[1]
+    target_sites = argv[2:]
+else:
+    target_file = 'bookmarks.html'
+    target_sites = []
 
 # clean the console. This is neccessary for ASCII color to work in Windows CMD.
 if os.name == 'nt':
