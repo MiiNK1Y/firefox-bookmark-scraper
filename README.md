@@ -38,8 +38,8 @@ The script then generates a '<strong>scraped.txt</strong>' with the links found 
     <br>
     This is because how the seeker function works. It uses those schemes to check if there is a URL in the current seeking line in the file.<br>
     When you enter a site(s) as an argument, the script adds those schemes to the site(s) to match all possible schemes the site might use.<br>
-    Some sites use "http://" instead of "https://". And some site don't use the "www" prefix. Thus it is neccessary to check for all possible combination<br>
+    Some sites use "http://" instead of "https://", and some sites don't use the "www" subdomain prefix. Thus it is neccessary to check for all possible combinations.<br>
     <br>
-    Be vary that some sites might not be detected in the bookmarks, for example "localhost" and maybe your router IP "192.168.0.1" or simmilar.
+    Be vary that some sites might not be detected in the bookmarks because of this, for example "localhost" and maybe your router IP "192.168.0.1" or simmilar.
     </em>
 </div>
