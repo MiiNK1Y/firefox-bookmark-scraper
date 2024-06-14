@@ -1,5 +1,5 @@
 <div align='center'>
-    <img src='logo.png' height='200px'/>
+    <img src='logo.png' height='200px' alt="logo"/>
     <h1>FFBMS</h1>
     <h3>Firefox Bookmark Scraper</h3>
     Get all the links from a Firefox Bookmarks.html, and put them in a .txt file.
