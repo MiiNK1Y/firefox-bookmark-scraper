@@ -1,92 +1,70 @@
-import sys, time
+#!.env/bin/python3
+
+from sys import argv
 from colorama import Fore
 
+target_file = argv[1]
+target_sites = argv[2:]
 
-#set the parameters passed
-argPath = sys.argv[1]
-nonFormatedArgSite = sys.argv[2:]
+class Firefox():
+    def __init__(self, target_file: str, target_sites: list) -> None:
+        self.target_file = target_file
+        self.target_sites = target_sites
+        self.url_schemes = ['https://', 'http://', 'https://www.', 'http://www.']
 
+    def clean_url_line(self, url: str) -> str:
+        cleaned_url_line = url.strip().split('"')[1::2][0]
+        return cleaned_url_line
 
-#setting possible prefixes found in the URLs
-urlFormats = ['https://', 'http://', 'https://www.', 'http://www.']
+    def make_url_from_string(self, site: str) -> str:
+        possible_url_combos = []
+        for url in self.url_schemes:
+            possible_url_combos.append(url + site)
+        return possible_url_combos
 
+    def make_url_combos(self) -> list:
+        possible_url_combos = []
+        if len(self.target_sites) > 0:
+            for site in self.target_sites:
+                url_combos = self.make_url_from_string(site)
+                for url in url_combos:
+                    possible_url_combos.append(url)
+        return possible_url_combos
 
-#for each passed site-parameter, construct possible url-combinations to seek
-if len(nonFormatedArgSite) > 0:
-    argSite = []
-    for url in urlFormats:
-        for item in nonFormatedArgSite:
-            constructedUrl = url + item
-            argSite.append(constructedUrl)
-#if there are no passed parameters, set the argSite to an empty string as placeholder
-else:
-    argSite = ""
-
-
-#some flashy colors
-def color_that_green(text):
-
-    return f"{Fore.GREEN}{text}{Fore.RESET}"
-
-
-#some more flashy colors
-def color_that_cyan(text):
-
-    return f"{Fore.CYAN}{text}{Fore.RESET}"
-
-
-#format the bookmark-url-line, removing the bloat on each side of the relevant url
-def format_line_string(line):
-    line = line.strip().split('"')[1::2][0]
-    return line
-
-
-def site_seek():
-
-    with open(argPath, 'r', encoding='UTF-8') as f:
-        loadFileToMem = f.readlines()
-        siteList = []
-        #loop through each item in the argSite, to check the existence of each item
-        if len(argSite) > 0:
-            for site in argSite:
-                #then loop through each line in the file, looking for valid items mathing with argSite
-                for line in loadFileToMem:
-                    if site in line:
-                        line = format_line_string(line)
-                        siteList.append(line)
+    def seek_sites(self) -> list:
+        target_sites = self.make_url_combos()
+        bookmark = open(self.target_file, 'r', encoding='UTF-8')
+        lines = bookmark.readlines()
+        bookmark.close()
+        urls = []
+        if len(target_sites) > 0:
+            look_for = target_sites
         else:
-            for url in urlFormats:
-                #then loop through each line in the file, looking for valid items mathing with argSite
-                for line in loadFileToMem:
-                    if url in line:
-                        line = format_line_string(line)
-                        siteList.append(line)
-        siteList = set(siteList)
-        siteList = sorted(list(siteList))
-    f.close()
-    return siteList
+            look_for = self.url_schemes
+        for line in lines:
+            for site in look_for:
+                if site in line:
+                    site = self.clean_url_line(line)
+                    urls.append(site)
+        urls = set(urls)
+        urls = sorted(list(urls))
+        return urls
 
+def c_green(string: str) -> str:
+    colored_string = Fore.GREEN + string + Fore.RESET
+    return colored_string
 
-def main():
-
-    fetchedSites = site_seek()
-    with open('demo/scraped_urls.txt', 'w') as newFile:
-        for i in fetchedSites:
-            shortStringI = f"{i[0:60]}....."
-            print(f"Adding: {color_that_green(shortStringI)}{' ' * 30}", end='\r')
-            newFile.writelines(f"{i}\n")
-            time.sleep(0.001)
-    newFile.close()
-    print(f"\nURLs found: {len(fetchedSites)}\nNew file created with the scraped urls in /demo/scraped_urls.txt\n")
-
-
-def main_imported():
-
-    fetchedSites = site_seek()
-    return fetchedSites
-
+def main() -> None:
+    bookmark = Firefox(target_file, target_sites)
+    fetched_sites = bookmark.seek_sites()
+    scraped = open('scraped.txt', 'w')
+    for num, url in enumerate(fetched_sites):
+        num += 1
+        short_string = url[0:40] + "....."
+        print(f"Adding ({num}): {c_green(short_string)}{' ' * 30}", end='\r')
+        scraped.writelines(url + "\n")
+    scraped.close()
+    print(f"\nURLs found: {len(fetched_sites)}\n'scraped.txt' was created.\n")
 
 if __name__ == '__main__':
     main()
-else:
-    main_imported()
